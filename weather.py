@@ -5,23 +5,48 @@ import requests
 from langchain.tools import tool
 import customtkinter as ctk
 
+
 @tool
 def get_weather(city: str):
     """Get the current temperature in Fahrenheit for a city using the Open-Meteo free API."""
-    # This is a simplified version; real apps usually convert city name to lat/long first
-    # Example for Philly; provides AI with a schema
-    url = f"https://api.open-meteo.com/v1/forecast?latitude=39.95&longitude=-75.16&current=temperature_2m" 
-    data = requests.get(url).json()
-    temp = data['current']['temperature_2m']
-    temp = (temp * 9/5) + 32 # convert to Fahrenheit
-    return f"{city}: {temp}°F."
+    
+    # 1. Geocoding: Turn city name into coordinates
+    geo_url = f"https://geocoding-api.open-meteo.com/v1/search?name={city}&count=1&language=en&format=json"
+    geo_data = requests.get(geo_url).json()
+    
+    if not geo_data.get('results'):
+        return f"Could not find coordinates for {city}."
+    
+    lat = geo_data['results'][0]['latitude']
+    lon = geo_data['results'][0]['longitude']
+
+    # 2. Weather: Use the dynamic lat/lon to get the temperature
+    weather_url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m"
+    data = requests.get(weather_url).json()
+    
+    temp_c = data['current']['temperature_2m']
+    temp_f = (temp_c * 9/5) + 32 # convert to Fahrenheit
+    
+    return f"{city} is {temp_f:.1f}°F."
+
+
+#@tool
+#def get_weather(city: str):
+#    """Get the current temperature in Fahrenheit for a city using the Open-Meteo free API."""
+#    # This is a simplified version; real apps usually convert city name to lat/long first
+#    # Example for Philly; provides AI with a schema
+#    url = f"https://api.open-meteo.com/v1/forecast?latitude=39.95&longitude=-75.16&current=temperature_2m" 
+#    data = requests.get(url).json()
+#    temp = data['current']['temperature_2m']
+#    temp = (temp * 9/5) + 32 # convert to Fahrenheit
+#    return f"{city}: {temp}°F."
 
 
 # START WORK
 
 def submit_action():
     city = entry.get()  # This gets the text from the box
-    label.configure(text=f"Agent says: Processing {city}...")
+    label.configure(text=f"Processing {city}...")
     app.update() # update the GUI
 
     # Initialize the agent
