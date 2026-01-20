@@ -73,7 +73,7 @@ app.geometry("400x200")
 app.title("Weather App")
 
 # 2. Add a label
-label = ctk.CTkLabel(app, text="")
+label = ctk.CTkLabel(app, text="", wraplength=350)
 label.pack(pady=10)
 
 # 3. Add the input box (Entry)
