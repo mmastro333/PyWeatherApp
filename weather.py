@@ -77,8 +77,6 @@ def get_current_weather(city: str):
 
 
 
-# START WORK
-
 def submit_action():
     city = entry.get()  # This gets the text from the box
     label.configure(text=f"Fetching weather data ...")
@@ -90,7 +88,6 @@ def submit_action():
      tools=[get_current_weather],
      system_prompt="You are a helpful assistant that can check the weather.  You print out city names with first letter capitalized and the rest lower case, followed by the state abbreviation after a comma."
     )
-
 
     # Invoke the agent
     response = agent.invoke({
@@ -121,8 +118,7 @@ button = ctk.CTkButton(app, text="Submit", command=submit_action)
 button.pack(pady=10)
 
 
-
 app.mainloop()
 
 
-#####
+
