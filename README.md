@@ -11,11 +11,7 @@ The response is displayed directly in the app window.
 
 ## Screenshot
 
-Add a screenshot of the running app (the window with the input box, Submit button, and weather response) to the project root as `screenshot.png`, then this section will render the image:
-
-```markdown
 ![Weather Application screenshot](screenshot.png)
-```
 
 ---
 
