@@ -4,7 +4,7 @@ pip install pyinstaller
 
 echo.
 echo Building PyWeatherApp.exe...
-pyinstaller --noconsole --onefile --add-data "weather_images;weather_images" --name "PyWeatherApp" weather.py
+python -m PyInstaller --noconsole --onefile --add-data "weather_images;weather_images" --name "PyWeatherApp" weather.py
 
 echo.
 echo Build complete! Check the 'dist' folder for PyWeatherApp.exe.
