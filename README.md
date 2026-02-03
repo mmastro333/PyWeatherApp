@@ -1,97 +1,72 @@
-## Weather Application
+# Weather Application
 
-This is a simple desktop weather assistant built with Python, `customtkinter`, `requests`, and a LangChain agent.  
-You type a city (for example `Trenton, NJ`) into the window, and the app looks up the city’s coordinates via the Open‑Meteo geocoding API, fetches the current conditions, and then has an LLM agent respond with a friendly, human‑readable sentence such as:
+A modern desktop weather assistant built with Python's `customtkinter` and valid requests to Open-Meteo. It features dynamic weather icons, system tray support, and a sidebar for managing saved cities.
 
-> Trenton, NJ is currently 75.2°F and partly cloudy.
-
-The response is displayed directly in the app window.
-
----
-
-## Screenshot
-
-![Weather Application screenshot](screenshot.png)
-
----
+![Screenshot](screenshot.png)
 
 ## Features
 
-- **LLM-powered weather assistant**: Uses a LangChain agent with a `get_current_weather` tool to call the Open‑Meteo API.
-- **City name to coordinates**: Automatically geocodes the city name to latitude/longitude before fetching weather data.
-- **Human‑friendly output**: Translates Open‑Meteo weather codes into readable descriptions (e.g., “light drizzle”, “clear skies”).
-- **Simple GUI**: Desktop window built with `customtkinter` (a modern theming layer on top of Tkinter).
-
----
+- **Icon Visualization**: Displays custom weather icons (e.g., sunny, rainy, cloudy) based on real-time conditions.
+- **System Tray Support**: Minimizes to the system tray with a dynamic icon showing the current temperature. Background processing ensures you stay updated without cluttering your taskbar.
+- **City Management**:
+  - **Sidebar List**: Save your favorite cities for quick access.
+  - **Click-to-Load**: Instantly check the weather by clicking a saved city.
+  - **Easy Removal**: Remove cities from your list with a single click.
+- **Smart Geocoding**:
+  - Supports "City, State" format (e.g., `Bayonne, NJ`) to distinguish between cities with the same name.
+  - Automatically fetches coordinates and weather data.
+- **Persistent Configuration**: Your saved cities and last selected location are stored in `config.json` and persist across restarts.
 
 ## Requirements
 
-- **Python**: 3.9 or later (recommended)
-- **Libraries** (from `requirements.txt`, install with `pip install -r requirements.txt`):
-  - `langchain`
-  - `requests`
+- **Python**: 3.9 or later
+- **Dependencies** (install via `pip`):
   - `customtkinter`
-  - Any additional packages required by your LangChain/LLM provider configuration
+  - `requests`
+  - `pystray` (for system tray support)
+  - `Pillow` (for image processing)
 
-You also need network access so the Open‑Meteo APIs and LLM backend can be reached.
+## Installation
 
----
-
-## How to Run
-
-1. **Clone the repository** (or download the source):
+1. **Clone the repository**:
    ```bash
-   git clone https://github.com/mmastro333/Weather-Application.git
-   cd Weather-Application
+   git clone https://github.com/mmastro333/PyWeatherApp.git
+   cd PyWeatherApp
    ```
 
-2. **Create and activate a virtual environment** (optional but recommended):
-   ```bash
-   python -m venv .venv
-   # Windows (PowerShell)
-   .venv\Scripts\Activate.ps1
-   # macOS / Linux
-   source .venv/bin/activate
-   ```
-
-3. **Install dependencies**:
+2. **Install dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Configure your LLM environment** (if needed):
-   - Set any required API keys or environment variables used by your LangChain configuration (for example, `OPENAI_API_KEY`, `GEMINI_API_KEY`, etc.), depending on which model backend you actually use.
+## Usage
 
-5. **Run the app**:
+1. **Run the application**:
    ```bash
    python weather.py
    ```
 
-6. **Use the app**:
-   - A window titled **“Weather App”** will open.
-   - In the text box, type a city (for example `Trenton, NJ`).
-   - Click **Submit**.
-   - The label updates to **“Fetching weather data ...”**, then the LLM agent’s final answer appears, e.g.:
-     > Trenton, NJ is currently 75.2°F and partly cloudy.
+2. **Check Weather**:
+   - Type a city name (e.g., `London` or `Paris, TX`) in the input box.
+   - Click **Check Weather**.
 
----
+3. **Manage Cities**:
+   - **Save**: After typing a city, click **Save City** to add it to the sidebar.
+   - **Load**: Click any city name in the sidebar to view its weather.
+   - **Remove**: Click the red **X** next to a city in the sidebar to delete it.
 
-## Operating System Compatibility
-
-This GUI app is built on `customtkinter`, which runs on top of the standard Python Tkinter GUI toolkit. It is expected to work on:
-
-- **Windows** 10/11 (tested)
-- **macOS** (recent versions with a standard Python/Tk installation)
-- **Linux** distributions that have Tkinter support installed
-
-If Tkinter or `customtkinter` is not available on your platform’s Python distribution, install the appropriate Tk packages or use a Python build that includes Tk support.
-
----
+4. **Minimize to Tray**:
+   - Close the window (click X) to minimize the app to the system tray.
+   - The tray icon will display the current temperature.
+   - **Right-click** the tray icon to **Open** the window or **Quit** the application.
 
 ## Project Structure
 
-- `weather.py` – main application code (GUI + LangChain agent + weather tool).
-- `requirements.txt` – Python dependencies.
-- `README.md` – this documentation.
-- `screenshot.png` – (optional) screenshot of the running app, referenced in the **Screenshot** section.
+- `weather.py`: Main application logic (GUI, API calls, Tray).
+- `weather_images/`: Directory containing dynamic weather icons.
+- `config.json`: user preferences and saved cities (auto-generated).
+- `requirements.txt`: Python dependencies.
 
+## APIs Used
+
+- **Open-Meteo**: Free weather API for geocoding and weather data. No API key required.
