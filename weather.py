@@ -10,33 +10,45 @@ from PIL import Image, ImageDraw, ImageFont
 import pystray
 from pystray import MenuItem as item
 
-# --- Configuration Management ---
-CONFIG_FILE = "config.json"
+# --- Helper for PyInstaller Resource Paths ---
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
 
+    return os.path.join(base_path, relative_path)
+
+# --- Configuration Management ---
 class Config:
     def __init__(self):
+        # Save config to AppData so it works when installed in Program Files
+        app_data = os.getenv('APPDATA')
+        self.config_dir = os.path.join(app_data, 'PyWeatherApp')
+        if not os.path.exists(self.config_dir):
+            os.makedirs(self.config_dir)
+            
+        self.filename = os.path.join(self.config_dir, "config.json")
         self.cities = []
         self.last_city = ""
         self.load()
 
     def load(self):
-        if os.path.exists(CONFIG_FILE):
+        if os.path.exists(self.filename):
             try:
-                with open(CONFIG_FILE, "r") as f:
+                with open(self.filename, 'r') as f:
                     data = json.load(f)
                     self.cities = data.get("cities", [])
                     self.last_city = data.get("last_city", "")
-            except Exception as e:
-                print(f"Error loading config: {e}")
+            except:
+                pass
 
     def save(self):
-        data = {
-            "cities": self.cities,
-            "last_city": self.last_city
-        }
         try:
-            with open(CONFIG_FILE, "w") as f:
-                json.dump(data, f, indent=4)
+            with open(self.filename, 'w') as f:
+                json.dump({"cities": self.cities, "last_city": self.last_city}, f, indent=4)
         except Exception as e:
             print(f"Error saving config: {e}")
 
@@ -456,7 +468,9 @@ class WeatherApp(ctk.CTk):
 
     def update_gui_icon(self, code):
         filename = get_icon_filename(code)
-        path = os.path.join("weather_images", filename)
+        # Use resource_path to find images in the bundled exe or local folder
+        path = resource_path(os.path.join("weather_images", filename))
+        
         if os.path.exists(path):
             img = ctk.CTkImage(light_image=Image.open(path), dark_image=Image.open(path), size=(100, 100))
             self.icon_label.configure(image=img)
