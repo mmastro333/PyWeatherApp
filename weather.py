@@ -323,10 +323,13 @@ class WeatherApp(ctk.CTk):
             del_btn = ctk.CTkButton(
                 row_frame, 
                 text="Remove", 
-                width=60, 
-                fg_color="#ff4444", # High visibility red
+                width=50,
+                height=24,
+                corner_radius=2,
+                fg_color="#ff6666", # Lighter red
                 text_color="white",
-                hover_color="#cc0000",
+                hover_color="#ff4444",
+                font=("Arial", 11),
                 command=lambda c=city: self.remove_city(c)
             )
             del_btn.pack(side="right", padx=(5, 0))
