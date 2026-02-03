@@ -4,6 +4,10 @@ A modern desktop weather assistant built with Python's `customtkinter` and valid
 
 ![Screenshot](screenshot.png)
 
+_System Tray View:_
+![Tray Screenshot](tray_screenshot.png)
+*The application minimizes to the system tray, showing the current temperature and providing detailed info on hover.*
+
 ## Features
 
 - **Icon Visualization**: Displays custom weather icons (e.g., sunny, rainy, cloudy) based on real-time conditions.
