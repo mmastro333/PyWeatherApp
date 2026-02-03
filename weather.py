@@ -356,22 +356,27 @@ class WeatherApp(ctk.CTk):
         self.result_label.configure(text=f"Fetching data for {city}...")
         self.update()
 
-        self.config.last_city = city
-        self.config.save()
-
         data, error = fetch_weather_data(city)
         
         if error:
             self.result_label.configure(text=error)
             return
             
-        display_text = f"{data['city']}, {data['region']}\n{data['temp_f']:.1f}°F\n{data['description'].title()}"
+        # Use resolved name
+        resolved_name = f"{data['city']}, {data['region']}"
+        self.input_var.set(resolved_name)
+        
+        # Save exact resolved name to history
+        self.config.last_city = resolved_name
+        self.config.save()
+            
+        display_text = f"{resolved_name}\n{data['temp_f']:.1f}°F\n{data['description'].title()}"
         self.result_label.configure(text=display_text)
         
         self.update_gui_icon(data['code'])
         
         # Format Tooltip
-        tooltip = f"PyWeatherApp - {data['city']}, {data['region']}  {data['temp_f']:.0f}F  & {data['description'].title()}"
+        tooltip = f"PyWeatherApp - {resolved_name}  {data['temp_f']:.0f}F  & {data['description'].title()}"
         self.tray.update_icon(f"{int(data['temp_f'])}°", data['code'], tooltip_text=tooltip)
 
     def update_gui_icon(self, code):
