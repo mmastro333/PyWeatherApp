@@ -281,6 +281,9 @@ class WeatherApp(ctk.CTk):
         self.save_btn = ctk.CTkButton(self.btn_frame, text="Save City", command=self.save_city_action, fg_color="green")
         self.save_btn.grid(row=0, column=1, padx=5)
 
+        self.about_btn = ctk.CTkButton(self.btn_frame, text="About", command=self.about_action, width=80)
+        self.about_btn.grid(row=0, column=2, padx=5)
+
         # Weather Display
         self.icon_label = ctk.CTkLabel(self.main_frame, text="")
         self.icon_label.pack(pady=(20, 10))
@@ -301,6 +304,31 @@ class WeatherApp(ctk.CTk):
 
         # Start Auto-Refresh Loop
         self.schedule_next_auto_refresh()
+
+    def about_action(self):
+        about_window = ctk.CTkToplevel(self)
+        about_window.title("About")
+        about_window.geometry("400x250")
+        
+        # Make modal (focus grab)
+        about_window.grab_set()
+        
+        title_label = ctk.CTkLabel(about_window, text="PyWeatherApp", font=("Arial", 20, "bold"))
+        title_label.pack(pady=(20, 5))
+        
+        ver_label = ctk.CTkLabel(about_window, text="Version 2.0", font=("Arial", 12))
+        ver_label.pack(pady=(0, 20))
+        
+        text = ("Originally architected and hand-encoded by\n"
+                "Michael Mastrogiacomo.\n\n"
+                "Enhanced and 'vibe coded' with\n"
+                "Google's AntiGravity.")
+        
+        info_label = ctk.CTkLabel(about_window, text=text, font=("Arial", 14), justify="center")
+        info_label.pack(pady=10)
+        
+        ok_btn = ctk.CTkButton(about_window, text="OK", command=about_window.destroy, width=100)
+        ok_btn.pack(pady=20)
 
     def schedule_next_auto_refresh(self):
         """Schedules the next refresh for a random time in the first 30min of the next hour."""

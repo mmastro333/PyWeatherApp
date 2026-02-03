@@ -70,3 +70,8 @@ A modern desktop weather assistant built with Python's `customtkinter` and valid
 ## APIs Used
 
 - **Open-Meteo**: Free weather API for geocoding and weather data. No API key required.
+
+## Credits
+
+This application was originally architected and hand-encoded by **Michael Mastrogiacomo**. It has since been expanded and "vibe coded" with the assistance of **Google's AntiGravity**, blending human engineering with advanced agentic AI capabilities.
+
