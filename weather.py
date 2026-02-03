@@ -4,6 +4,8 @@ import json
 import os
 import sys
 import threading
+import random
+from datetime import datetime, timedelta
 from PIL import Image, ImageDraw, ImageFont
 import pystray
 from pystray import MenuItem as item
@@ -297,6 +299,57 @@ class WeatherApp(ctk.CTk):
         self.protocol("WM_DELETE_WINDOW", self.minimize_to_tray)
         threading.Thread(target=self.tray.run, daemon=True).start()
 
+        # Start Auto-Refresh Loop
+        self.schedule_next_auto_refresh()
+
+    def schedule_next_auto_refresh(self):
+        """Schedules the next refresh for a random time in the first 30min of the next hour."""
+        now = datetime.now()
+        # Calculate start of next hour
+        next_hour = (now + timedelta(hours=1)).replace(minute=0, second=0, microsecond=0)
+        
+        # Random delay between 0 and 30 minutes (in seconds)
+        random_delay = random.randint(0, 30 * 60)
+        target_time = next_hour + timedelta(seconds=random_delay)
+        
+        # Calculate wait time in ms
+        wait_seconds = (target_time - now).total_seconds()
+        wait_ms = int(wait_seconds * 1000)
+        
+        print(f"Next auto-refresh scheduled for {target_time.strftime('%H:%M:%S')} (in {wait_seconds/60:.1f} mins)")
+        self.after(wait_ms, self.perform_auto_refresh)
+
+    def perform_auto_refresh(self):
+        """Background task to fetch weather and update UI."""
+        city = self.input_var.get()
+        if not city:
+            self.schedule_next_auto_refresh()
+            return
+            
+        def job():
+            # Run fetch in background thread
+            data, error = fetch_weather_data(city)
+            if data and not error:
+                # Update UI on main thread
+                self.after(0, lambda: self.update_ui_from_data(data)) # Don't update input text, just visuals
+        
+        threading.Thread(target=job, daemon=True).start()
+        
+        # Schedule the NEXT one
+        self.schedule_next_auto_refresh()
+
+    def update_ui_from_data(self, data):
+        """Updates labels and tray icon from weather data dict."""
+        resolved_name = f"{data['city']}, {data['region']}"
+        display_text = f"{resolved_name}\n{data['temp_f']:.1f}°F\n{data['description'].title()}"
+        self.result_label.configure(text=display_text)
+        
+        self.update_gui_icon(data['code'])
+        
+        # Format Tooltip
+        tooltip = f"PyWeatherApp - {resolved_name}  {data['temp_f']:.0f}F  & {data['description'].title()}"
+        self.tray.update_icon(f"{int(data['temp_f'])}°", data['code'], tooltip_text=tooltip)
+
     def refresh_sidebar(self):
         # Clear existing
         for widget in self.sidebar_frame.winfo_children():
@@ -370,15 +423,8 @@ class WeatherApp(ctk.CTk):
         self.input_var.set(resolved_name)
         
         # NOTE: We do NOT update last_city here anymore, only on explicit Save.
-            
-        display_text = f"{resolved_name}\n{data['temp_f']:.1f}°F\n{data['description'].title()}"
-        self.result_label.configure(text=display_text)
         
-        self.update_gui_icon(data['code'])
-        
-        # Format Tooltip
-        tooltip = f"PyWeatherApp - {resolved_name}  {data['temp_f']:.0f}F  & {data['description'].title()}"
-        self.tray.update_icon(f"{int(data['temp_f'])}°", data['code'], tooltip_text=tooltip)
+        self.update_ui_from_data(data)
 
     def update_gui_icon(self, code):
         filename = get_icon_filename(code)
