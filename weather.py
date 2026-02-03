@@ -346,6 +346,9 @@ class WeatherApp(ctk.CTk):
         city = self.input_var.get().strip()
         if city:
             self.config.add_city(city)
+            # Update default startup city to the last saved one
+            self.config.last_city = city
+            self.config.save()
             self.refresh_sidebar()
 
     def submit_action(self):
@@ -366,9 +369,7 @@ class WeatherApp(ctk.CTk):
         resolved_name = f"{data['city']}, {data['region']}"
         self.input_var.set(resolved_name)
         
-        # Save exact resolved name to history
-        self.config.last_city = resolved_name
-        self.config.save()
+        # NOTE: We do NOT update last_city here anymore, only on explicit Save.
             
         display_text = f"{resolved_name}\n{data['temp_f']:.1f}°F\n{data['description'].title()}"
         self.result_label.configure(text=display_text)
