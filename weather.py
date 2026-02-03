@@ -252,7 +252,7 @@ class WeatherApp(ctk.CTk):
         self.grid_rowconfigure(0, weight=1)
 
         # --- Sidebar ---
-        self.sidebar_frame = ctk.CTkScrollableFrame(self, label_text="Saved Cities", width=140)
+        self.sidebar_frame = ctk.CTkScrollableFrame(self, label_text="Saved Cities", width=200)
         self.sidebar_frame.grid(row=0, column=0, padx=(10, 0), pady=10, sticky="nsew")
         
         # --- Main Content ---
@@ -322,8 +322,8 @@ class WeatherApp(ctk.CTk):
             # Remove Button (X)
             del_btn = ctk.CTkButton(
                 row_frame, 
-                text="X", 
-                width=30, 
+                text="Remove", 
+                width=60, 
                 fg_color="#ff4444", # High visibility red
                 text_color="white",
                 hover_color="#cc0000",
