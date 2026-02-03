@@ -172,8 +172,12 @@ def fetch_weather_data(city: str):
 class SystemTrayApp:
     def __init__(self, root_app):
         self.root_app = root_app
-        self.icon = None
         self.running = False
+        
+        # Initialize icon immediately to avoid race conditions
+        image = self.create_image()
+        menu = (item('Open', self.show_window), item('Quit', self.quit_app))
+        self.icon = pystray.Icon("weather_app", image, "Weather App", menu)
 
     def create_image(self, temp_text="--°"):
         width = 64
@@ -190,9 +194,7 @@ class SystemTrayApp:
 
     def run(self):
         self.running = True
-        image = self.create_image()
-        menu = (item('Open', self.show_window), item('Quit', self.quit_app))
-        self.icon = pystray.Icon("weather_app", image, "Weather App", menu)
+        # icon is already created
         self.icon.run()
 
     def show_window(self, icon, item):
