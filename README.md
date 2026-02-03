@@ -24,28 +24,13 @@ _System Tray View:_
 
 ## Installation
 
-You can run the application directly from source or compile it into a portable Windows executable/installer.
+### Method 1: Download Installer (Recommended)
 
-### Method 1: Windows Installer (Recommended)
+**[Download PyWeatherApp Installer (v2.0)](https://github.com/mmastro333/PyWeatherApp/releases/download/v2.0/PyWeatherApp_Setup_v2.0.exe)**
 
-This method creates a standard `.exe` installer that can be set to **run automatically when Windows starts**.
-
-1.  **Clone the repository**:
-    ```bash
-    git clone https://github.com/mmastro333/PyWeatherApp.git
-    cd PyWeatherApp
-    ```
-2.  **Build the Executable**:
-    -   Double-click the `build_exe.bat` file in the project folder.
-    -   This uses `PyInstaller` to create a standalone file in the `dist` folder.
-3.  **Generate the Installer**:
-    -   Download [Inno Setup](https://jrsoftware.org/isdl.php).
-    -   Open `setup_script.iss` with Inno Setup.
-    -   Click **Run** (or press F9).
-    -   This will generate `Output\PyWeatherApp_Setup_v2.0.exe`.
-4.  **Install**:
-    -   Run the generated setup file.
-    -   Optionally check "Automatically start PyWeatherApp when Windows starts".
+1.  Download the `.exe` file from the link above.
+2.  Run the installer.
+3.  Optionally check **"Automatically start PyWeatherApp when Windows starts"**.
 
 ### Method 2: Run from Source (Developer)
 
@@ -71,6 +56,24 @@ This method creates a standard `.exe` installer that can be set to **run automat
 3.  **Minimize to Tray**:
     -   Click the **X** (close) button on the window. The app will keep running in the tray.
     -   **Right-click** the tray icon to **Open** the window or **Quit**.
+
+## Building the Installer (For Developers)
+
+If you want to modify the code and build your own installer:
+
+1.  **Clone the repository**:
+    ```bash
+    git clone https://github.com/mmastro333/PyWeatherApp.git
+    cd PyWeatherApp
+    ```
+2.  **Build the Executable**:
+    -   Double-click the `build_exe.bat` file in the project folder.
+    -   This uses `PyInstaller` to create a standalone file in the `dist` folder.
+3.  **Generate the Installer**:
+    -   Download [Inno Setup](https://jrsoftware.org/isdl.php).
+    -   Open `setup_script.iss` with Inno Setup.
+    -   Click **Run** (or press F9).
+    -   This will generate `Output\PyWeatherApp_Setup_v2.0.exe`.
 
 ## Project Structure
 
