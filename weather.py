@@ -260,9 +260,15 @@ class WeatherApp(ctk.CTk):
         self.main_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
         
         # Input Area (Main Frame)
+        self.input_frame_inner = ctk.CTkFrame(self.main_frame, fg_color="transparent")
+        self.input_frame_inner.pack(pady=20)
+        
+        self.input_label = ctk.CTkLabel(self.input_frame_inner, text="Enter City:")
+        self.input_label.pack(side="left", padx=(0, 10))
+        
         self.input_var = ctk.StringVar(value=self.config.last_city)
-        self.city_entry = ctk.CTkEntry(self.main_frame, placeholder_text="Enter city...", width=200, textvariable=self.input_var)
-        self.city_entry.pack(pady=20)
+        self.city_entry = ctk.CTkEntry(self.input_frame_inner, placeholder_text="e.g. Bayonne, NJ", width=200, textvariable=self.input_var)
+        self.city_entry.pack(side="left")
         
         self.btn_frame = ctk.CTkFrame(self.main_frame, fg_color="transparent")
         self.btn_frame.pack(pady=5)
@@ -318,9 +324,9 @@ class WeatherApp(ctk.CTk):
                 row_frame, 
                 text="X", 
                 width=30, 
-                fg_color="transparent",
-                text_color="red",
-                hover_color=("gray70", "gray30"),
+                fg_color="#ff4444", # High visibility red
+                text_color="white",
+                hover_color="#cc0000",
                 command=lambda c=city: self.remove_city(c)
             )
             del_btn.pack(side="right", padx=(5, 0))
