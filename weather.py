@@ -200,9 +200,13 @@ class SystemTrayApp:
         self.root_app.lift()
         self.root_app.focus_force()
 
-    def update_icon(self, temp_str, weather_code):
+    def update_icon(self, temp_str, weather_code, tooltip_text="Weather App"):
         if not self.icon:
             return
+            
+        # Update tooltip
+        self.icon.title = tooltip_text
+        
         filename = get_icon_filename(weather_code)
         path = os.path.join("weather_images", filename)
         
@@ -354,7 +358,10 @@ class WeatherApp(ctk.CTk):
         self.result_label.configure(text=display_text)
         
         self.update_gui_icon(data['code'])
-        self.tray.update_icon(f"{int(data['temp_f'])}°", data['code'])
+        
+        # Format Tooltip
+        tooltip = f"PyWeatherApp - {data['city']}, {data['region']}  {data['temp_f']:.0f}F  & {data['description'].title()}"
+        self.tray.update_icon(f"{int(data['temp_f'])}°", data['code'], tooltip_text=tooltip)
 
     def update_gui_icon(self, code):
         filename = get_icon_filename(code)
